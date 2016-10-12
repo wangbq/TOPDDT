@@ -4,9 +4,14 @@
 #include <fstream>
 #include <string>
 #include <math.h>
+#include "TH1F.h"
+#include "TChain.h"
+#include "TFile.h"
 //#include "TOPDDTmain.h"
 
 using namespace std;
+
+#define MAXHITS 65536
 
 typedef struct {
 	int evt_no;
@@ -32,23 +37,25 @@ void initialize() {
 
 void finalize() {
 	//save histos to pdf files
-	h_num_hits->Save("h_num_hits.pdf");
-	h_adc->Save("h_adc.pdf");
-	h_tdc->Save("h_tdc.pdf");
+	TFile outfile("outfile.root","recreate");
+	h_num_hits->Write();
+	h_adc->Write();
+	h_tdc->Write();
+	outfile.Close();
 }
 
 void plot_histos(const vector<tophit> &hits) {
 	int nhits=hits.size();
 	h_num_hits->Fill(nhits);
 	for (int i=0;i<nhits;i++) {
-		h_adc->Fill(hits[i].adc);
-		h_tdc->Fill(hits[i].tdc);
+		h_adc->Fill(hits[i].ADC);
+		h_tdc->Fill(hits[i].TDC);
 	}
 }
 
 void Main(){
 	initialize(); // initialize histograms
-	string filename="*.root";
+	string filename="run003330_slot01_laser_cpr3001_converted.root";
 	TChain *eventNtuple = new TChain("topddt");
 	eventNtuple->Add(filename.c_str());
 
@@ -77,7 +84,7 @@ void Main(){
 			if (t_PulseWidth[j]<3 || t_PulseWidth[j]>10) continue;
 			if (t_Flag[j]<=0) continue;
 			if (t_CorrTime[j]==0) continue;
-			struct hit;
+			tophit hit;
 			hit.evt_no=evt;
 			hit.slot_no=(int)t_BarID[j];
 			hit.channel_id=(int)t_ChannelID[j];
