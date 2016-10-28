@@ -7,11 +7,11 @@
 #include "TH1F.h"
 #include "TChain.h"
 #include "TFile.h"
-//#include "TOPDDTmain.h"
+#include "TString.h"
 
 using namespace std;
 
-#define MAXHITS 65536
+#define MAXHITS 32000
 
 typedef struct {
 	int evt_no;
@@ -27,12 +27,23 @@ typedef struct {
 TH1F *h_num_hits;
 TH1F *h_adc;
 TH1F *h_tdc;
+vector<TH1F*> h_hits;
+vector<TH1F*> h_slot_adc;
+vector<TH1F*> h_slot_tdc;
 
 void initialize() {
 	//example histos, range and bins should be determined later
 	h_num_hits=new TH1F("h_num_hits","h_num_hits",100,0,100);
-	h_adc=new TH1F("h_adc","h_adc",100,0,100);
+	h_adc=new TH1F("h_adc","h_adc",200,100,2048);
 	h_tdc=new TH1F("h_tdc","h_tdc",100,0,100);
+	for (int i=0;i<16;i++) {
+		TH1F *h1=new TH1F(Form("h_%d", i+1), Form("nhits for slot %d", i+1),100,0,100);
+		h_hits.push_back(h1);
+		TH1F *h2=new TH1F(Form("hadc_%d", i+1), Form("adc for slot %d", i+1),200,100,2048);
+		h_slot_adc.push_back(h2);
+		TH1F *h3=new TH1F(Form("htdc_%d", i+1), Form("tdc for slot %d", i+1),100,0,100);
+		h_slot_tdc.push_back(h3);
+	}
 }
 
 void finalize() {
@@ -41,15 +52,27 @@ void finalize() {
 	h_num_hits->Write();
 	h_adc->Write();
 	h_tdc->Write();
+	for (int i=0;i<16;i++) {
+		h_hits[i]->Write();
+		h_slot_adc[i]->Write();
+		h_slot_tdc[i]->Write();
+	}
 	outfile.Close();
 }
 
 void plot_histos(const vector<tophit> &hits) {
 	int nhits=hits.size();
 	h_num_hits->Fill(nhits);
+	int slot_hits[16]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 	for (int i=0;i<nhits;i++) {
 		h_adc->Fill(hits[i].ADC);
 		h_tdc->Fill(hits[i].TDC);
+		slot_hits[hits[i].slot_no-1]++;
+		h_slot_adc[hits[i].slot_no-1]->Fill(hits[i].ADC);
+		h_slot_tdc[hits[i].slot_no-1]->Fill(hits[i].TDC);
+	}
+	for (int i=0;i<16;i++) {
+		h_hits[i]->Fill(slot_hits[i]);
 	}
 }
 
@@ -75,11 +98,13 @@ void Main(){
 
 	//event loop
 	int n_eventProcessed=eventNtuple->GetEntries();
+	cout<<"total events: "<<n_eventProcessed<<endl;
 	for (int i = 0; i< n_eventProcessed; i++) { 
 		if (i%1000==0) { std::cout << i << endl; }
 		eventNtuple->GetEntry(i);
 		vector<tophit> b_eventVector;     
 		for (int j = 0; j<nhits; j++) { 
+			// cuts for topcaf hit
 			if (t_ADC[j]<100 || t_ADC[j]>2048) continue;
 			if (t_PulseWidth[j]<3 || t_PulseWidth[j]>10) continue;
 			if (t_Flag[j]<=0) continue;
