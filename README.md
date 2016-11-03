@@ -19,8 +19,8 @@ root -l Main.cpp\(\"\*.root\"\)
 Another way to run it is from the root command line:
 
 ```
-.L Main.cpp
-Main("inputfile.root")
+root [0] .L Main.cpp
+root [1] Main("inputfile.root")
 ```
 
 Wildcards could also be used without escaping.
