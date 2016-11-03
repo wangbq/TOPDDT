@@ -76,9 +76,8 @@ void plot_histos(const vector<tophit> &hits) {
 	}
 }
 
-void Main(){
+void Main(string filename){
 	initialize(); // initialize histograms
-	string filename="run003330_slot01_laser_cpr3001_converted.root";
 	TChain *eventNtuple = new TChain("topddt");
 	eventNtuple->Add(filename.c_str());
 
