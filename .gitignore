@@ -1,4 +1,6 @@
 *.un*
 *.root
 *.pdf
-*cxx*
+*.cxx
+*.d
+*.so
