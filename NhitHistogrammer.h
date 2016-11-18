@@ -1,6 +1,7 @@
 #include "Main.h"
+#include "TCanvas.h"
 
-Class NhitHistogrammer: public Histogrammer {
+class NhitHistogrammer: public Histogrammer {
 	public:
 		NhitHistogrammer();
 		~NhitHistogrammer() {};
@@ -33,7 +34,7 @@ void NhitHistogrammer::process_event(const vector<tophit> &hits) {
 }
 
 void NhitHistogrammer::finalize() {
-	h_hits->Write();
+	h_num_hits->Write();
 	for (int i=0;i<16;i++) {
 		h_hits[i]->Write();
 	}
@@ -45,7 +46,7 @@ void NhitHistogrammer::plot() {
 	TCanvas *c2=new TCanvas("C2_NhitHistogrammer","number of hits per event for each module",800,600);
 	c2->Divide(4,4);
 	for (int i=1;i<=16;i++) {
-		c2->Cd(i);
+		c2->cd(i);
 		h_hits[i-1]->Draw();
 	}
 }

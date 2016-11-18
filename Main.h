@@ -24,16 +24,16 @@ class Histogrammer {
 	public:
 		Histogrammer() {};
 		~Histogrammer() {};
-		void process_event(const vector<tophit> &hits) {};
-		void finalize() {};
-		void plot() {};
+		virtual void process_event(const vector<tophit> &hits) {};
+		virtual void finalize() {};
+		virtual void plot() {};
 };
 
 class Experiment {
 	public:
 		Experiment(string input, string treename, string output, int type);
 		~Experiment() {};
-		void add_histogrammer(Histogrammer *ht) { hts.append(ht); };
+		void add_histogrammer(Histogrammer *ht) { hts.push_back(ht); }
 		void event_loop();
 		void finalize();
 		void plot();

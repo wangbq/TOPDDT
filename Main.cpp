@@ -3,13 +3,15 @@
 #include <fstream>
 #include <string>
 #include <math.h>
+#include <vector>
 #include "TH1F.h"
 #include "TChain.h"
 #include "TFile.h"
 #include "TString.h"
 #include "Main.h"
+#include "NhitHistogrammer.h"
 
-void Experiment::Experiment(string input, string treename, string output, int type) {
+Experiment::Experiment(string input, string treename, string output, int type) {
 	t_input=input;
 	t_output=output;
 	t_treename=treename;
@@ -34,7 +36,6 @@ void Experiment::event_loop() {
 	eventNtuple->SetBranchAddress("Flag",t_Flag);
 	eventNtuple->SetBranchAddress("CorrTime",t_CorrTime);
 
-	//event loop
 	int n_eventProcessed=eventNtuple->GetEntries();
 	cout<<"total events: "<<n_eventProcessed<<endl;
 	for (int i = 0; i< n_eventProcessed; i++) { 
@@ -58,8 +59,7 @@ void Experiment::event_loop() {
 			hit.CorrTime=t_CorrTime[j];
 			b_eventVector.push_back(hit);
 		}
-		//plot_histos(b_eventVector);
-		for (j=0;j<hts.size();j++) {
+		for (int j=0;j<hts.size();j++) {
 			hts[j]->process_event(b_eventVector);
 		}
 	}
@@ -81,8 +81,14 @@ void Experiment::finalize() {
 
 void Main() {
 	Experiment e("run003423_slot03_laserWithB_cpr3003_converted.root","topddt","outfile.root",0);
-	//e.add_histogrammer();
+	NhitHistogrammer *nh=new NhitHistogrammer();
+	e.add_histogrammer(nh);
 	e.event_loop();
-	e.plot();
+	//e.plot();
 	e.finalize();
 }
+
+int main() {
+	Main();
+}
+
