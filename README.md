@@ -4,26 +4,37 @@ Skeleton code for TOP DQM development.
 
 ## Usage
 
-Running it from command line:
+Before run this program, compile it with
 
 ```
-root -l Main.cpp\(\"inputfile.root\"\)
+make
 ```
 
-where inputfile.root is the file you want to analyze. If there are more than one file you want to analyze, wildcards can be used as
+Then run it with
 
 ```
-root -l Main.cpp\(\"\*.root\"\)
+./topddt
 ```
 
-Another way to run it is from the root command line:
+## How to Write New Histogrammer
+
+NhitHistogrammer could be used as a template to write new histogrammer.
+
+1. Create a new file and include `Main.h` in the beginning.
+
+2. Write a new class which is the subclass of Histogrammer.
+
+3. In member function `process_event`, write codes to fill histograms.
+
+4. In member function `plot`, create a new `TCanvas` object and plot histograms.
+
+5. In member function `finalize`, save the histograms to output file.
+
+6. Include the new created file in the beginning of `Main.cpp`.
+
+7. Create an object of the new class, and add it to the experiment object in function `Main`, like the following:
 
 ```
-root [0] .L Main.cpp
-root [1] Main("inputfile.root")
+	NhitHistogrammer *nh=new NhitHistogrammer();
+	e.add_histogrammer(nh);
 ```
-
-Wildcards could also be used without escaping.
-
-After running the script, the output histograms are saved in a root file called "outfile.root". You can write a script to read this file and make fancy plots by your self. Or you can open it with root and inspect it by using TBrowser.
-
