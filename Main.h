@@ -1,5 +1,7 @@
 #include <vector>
 #include <string>
+#include "TObject.h"
+#include "TList.h"
 
 #ifndef MAIN_H
 #define MAIN_H
@@ -20,7 +22,7 @@ typedef struct {
 } tophit; 
 
 
-class Histogrammer {
+class Histogrammer: public TObject {
 	public:
 		Histogrammer() {};
 		~Histogrammer() {};
@@ -33,12 +35,13 @@ class Experiment {
 	public:
 		Experiment(string input, string treename, string output, int type);
 		~Experiment() {};
-		void add_histogrammer(Histogrammer *ht) { hts.push_back(ht); }
+		void add_histogrammer(Histogrammer *ht) { hts->Add(ht); }
 		void event_loop();
 		void finalize();
 		void plot();
 	private:
-		vector<Histogrammer*> hts;
+		//vector<Histogrammer*> hts;
+		TList *hts;
 		string t_input;
 		string t_treename;
 		string t_output;

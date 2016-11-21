@@ -16,6 +16,7 @@ Experiment::Experiment(string input, string treename, string output, int type) {
 	t_output=output;
 	t_treename=treename;
 	t_type=type;
+	hts=new TList();
 }
 
 void Experiment::event_loop() {
@@ -59,22 +60,28 @@ void Experiment::event_loop() {
 			hit.CorrTime=t_CorrTime[j];
 			b_eventVector.push_back(hit);
 		}
-		for (int j=0;j<hts.size();j++) {
-			hts[j]->process_event(b_eventVector);
+		TIter next(hts);
+		Histogrammer *ht;
+		while ((ht = (Histogrammer *) next())) {
+			ht->process_event(b_eventVector);
 		}
 	}
 }
 
 void Experiment::plot() {
-	for (int i=0;i<hts.size();i++) {
-		hts[i]->plot();
+	TIter next(hts);
+	Histogrammer *ht;
+	while ((ht=(Histogrammer*)next())) {
+		ht->plot();
 	}
 }
 
 void Experiment::finalize() {
 	TFile outfile(t_output.c_str(),"recreate");
-	for (int i=0;i<hts.size();i++) {
-		hts[i]->finalize();
+	TIter next(hts);
+	Histogrammer *ht;
+	while ((ht=(Histogrammer*)next())) {
+		ht->finalize();
 	}
 	outfile.Close();
 }
