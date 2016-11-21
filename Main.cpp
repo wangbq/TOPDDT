@@ -91,7 +91,7 @@ void Main() {
 	NhitHistogrammer *nh=new NhitHistogrammer();
 	e.add_histogrammer(nh);
 	e.event_loop();
-	//e.plot();
+	e.plot();
 	e.finalize();
 }
 

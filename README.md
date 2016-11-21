@@ -4,17 +4,29 @@ Skeleton code for TOP DQM development.
 
 ## Usage
 
-Before run this program, compile it with
+There are two ways to run this script:
+
+1. Run directly with ROOT:
+
+```
+root Main.cpp
+```
+
+You can change the input and output filenames in the function `Main()`.
+
+2. Compile first:
 
 ```
 make
 ```
 
-Then run it with
+then run it with
 
 ```
 ./topddt
 ```
+
+The program runs much faster in this way. But `gcc` is required for compiling.
 
 ## How to Write New Histogrammer
 
