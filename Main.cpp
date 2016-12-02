@@ -87,7 +87,7 @@ void Experiment::finalize() {
 }
 
 void Main() {
-	Experiment e("run003423_slot03_laserWithB_cpr3003_converted.root","topddt","outfile.root",0);
+	Experiment e("run003424*converted.root","topddt","outfile.root",0);
 	NhitHistogrammer *nh=new NhitHistogrammer();
 	e.add_histogrammer(nh);
 	e.event_loop();

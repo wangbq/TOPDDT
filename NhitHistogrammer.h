@@ -23,13 +23,13 @@ NhitHistogrammer::NhitHistogrammer() {
 
 void NhitHistogrammer::process_event(const vector<tophit> &hits) {
 	int nhits=hits.size();
-	h_num_hits->Fill(nhits);
+	if (nhits>0) h_num_hits->Fill(nhits);
 	int slot_hits[16]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 	for (int i=0;i<nhits;i++) {
 		slot_hits[hits[i].slot_no-1]++;
 	}
 	for (int i=0;i<16;i++) {
-		h_hits[i]->Fill(slot_hits[i]);
+		if (slot_hits[i]>0) h_hits[i]->Fill(slot_hits[i]);
 	}
 }
 
