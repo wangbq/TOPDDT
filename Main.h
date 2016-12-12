@@ -26,7 +26,7 @@ class Histogrammer: public TObject {
 	public:
 		Histogrammer() {};
 		~Histogrammer() {};
-		virtual void process_event(const vector<tophit> &hits) {};
+		virtual void process_event(const vector<tophit> &hits)=0;
 		virtual void finalize() {};
 		virtual void plot() {};
 };
