@@ -1,6 +1,7 @@
 #include <cmath>
 #include <iostream>
 #include <fstream>
+#include <string>
 #include <math.h>
 #include "TH1F.h"
 #include "TChain.h"
@@ -101,7 +102,37 @@ void Experiment::finalize() {
 	outfile.Close();
 }
 
+TList* parse_csv(const TString &s) {
+	TList *l=new TList();
+	int start=0,end=s.Length();
+	int index=0;
+	cout<<s<<endl;
+	while((index=TString(s(start,end)).Index(','))!=-1) {
+		cout<<start<<" "<<index<<endl;
+		l->Add(new TObjString(TString(s(start,index))));
+		start+=index+1;
+	}
+	l->Add(new TObjString(TString(s(start,end))));
+	return l;
+}
+
+TString trim(const TString &s) {
+	TString ss=s.Strip(TString::kLeading, ' ');
+	TString sss=ss.Strip();
+	return sss;
+}
+
 void Main() {
+	ifstream f("input.csv");
+	string line;
+	while (getline(f,line)) {
+		TList *l=parse_csv(TString(line.c_str()));
+		TIter next(l);
+		TObjString *ss;
+		while((ss=(TObjString*)next())) {
+			cout<<trim(ss->GetString())<<endl;
+		}
+	}
 	Experiment e("run003424*converted.root","topddt","outfile.root",0);
 	NhitsPlot *nh=new NhitsPlot();
 	nh->setup_type(1,1);

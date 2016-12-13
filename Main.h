@@ -1,6 +1,8 @@
 #include "TObject.h"
 #include "TList.h"
 #include "TH1.h"
+#include "TH1F.h"
+#include "TH2F.h"
 
 #ifndef MAIN_H
 #define MAIN_H
@@ -41,12 +43,12 @@ class Histogrammer: public TObject {
 		TList hlist;
 };
 
-virtual void Histogrammer::setup_type(int nhist, int ndim) {
+void Histogrammer::setup_type(int nhist, int ndim) {
 	this->nhist=nhist;
 	this->ndim=ndim;
 }
 
-virtual void Histogrammer::setup_histo(TString name, TString title, int nbinsx, float xmin, float xmax) {
+void Histogrammer::setup_histo(TString name, TString title, int nbinsx, float xmin, float xmax) {
 	this->name=name;
 	this->title=title;
 	this->nbinsx=nbinsx;
@@ -54,7 +56,7 @@ virtual void Histogrammer::setup_histo(TString name, TString title, int nbinsx, 
 	this->xmax=xmax;
 }
 
-virtual void Histogrammer::setup_histo(TString name, TString title, int nbinsx, float xmin, float xmax, int nbinsy, float ymin, float ymax) {
+void Histogrammer::setup_histo(TString name, TString title, int nbinsx, float xmin, float xmax, int nbinsy, float ymin, float ymax) {
 	this->name=name;
 	this->title=title;
 	this->nbinsx=nbinsx;
@@ -65,7 +67,7 @@ virtual void Histogrammer::setup_histo(TString name, TString title, int nbinsx, 
 	this->ymax=ymax;
 }
 
-virtual void Histogrammer::initialize() {
+void Histogrammer::initialize() {
 	for (int i=0;i<nhist;i++) {
 		TString t;
 		t.Form("_%d",i);
@@ -80,7 +82,7 @@ virtual void Histogrammer::initialize() {
 	}
 }
 
-virtual void Histogrammer::plot() {
+void Histogrammer::plot() {
 	TIter next(&hlist);
 	TH1 *h;
 	while ((h = (TH1 *) next())) {
@@ -88,7 +90,7 @@ virtual void Histogrammer::plot() {
 	}
 }
 
-virtual void Histogrammer::finalize() {
+void Histogrammer::finalize() {
 	TIter next(&hlist);
 	TH1 *h;
 	while ((h = (TH1 *) next())) {
