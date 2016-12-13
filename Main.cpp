@@ -11,6 +11,23 @@
 #include "Main.h"
 #include "NhitHistogrammer.h"
 
+class Experiment {
+	public:
+		Experiment(string input, string treename, string output, int type);
+		~Experiment() {};
+		void add_histogrammer(Histogrammer *ht) { hts->Add(ht); }
+		void event_loop();
+		void finalize();
+		void plot();
+	private:
+		//vector<Histogrammer*> hts;
+		TList *hts;
+		string t_input;
+		string t_treename;
+		string t_output;
+		int t_type;
+};
+
 Experiment::Experiment(string input, string treename, string output, int type) {
 	t_input=input;
 	t_output=output;
