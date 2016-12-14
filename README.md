@@ -54,7 +54,8 @@ Each line of this file describes one histogrammer, which includes the number of 
 			nh=new NhitsPerModulePlot();
 		}
 ```
-5. Define the parameters in the input csv files.
 
-Look at `NhitsPlot.h` and `NhitsPerModulePlot.h` for more details.
+Finally you can define the parameters in the input csv file.
+
+Look at `NhitsPlot.h` and `NhitsPerModulePlot.h` for more implementation details.
 
