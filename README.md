@@ -28,25 +28,33 @@ then run it with
 
 The program runs much faster in this way. But `gcc` is required for compiling.
 
-## How to Write New Histogrammer
+## Input file format
 
-NhitHistogrammer could be used as a template to write new histogrammer.
-
-1. Create a new file and include `Main.h` in the beginning.
-
-2. Write a new class which is the subclass of Histogrammer.
-
-3. In member function `process_event`, write codes to fill histograms.
-
-4. In member function `plot`, create a new `TCanvas` object and plot histograms.
-
-5. In member function `finalize`, save the histograms to output file.
-
-6. Include the new created file in the beginning of `Main.cpp`.
-
-7. Create an object of the new class, and add it to the experiment object in function `Main`, like the following:
+This program reads input parameters from a csv file. One example showns below:
 
 ```
-	NhitHistogrammer *nh=new NhitHistogrammer();
-	e.add_histogrammer(nh);
+#number of histos, histo dimension (1D or 2D), class name, name, title, nbinsx, xmin, xmax, (for 2D: nbinsy, ymin, ymax)
+1,1,NhitsPlot, hnhits, histograms for nhits, 100, 0, 200
+16,1,NhitsPerModulePlot, hnhits_per_module, nhits for each module, 100, 0, 200
 ```
+
+Each line of this file describes one histogrammer, which includes the number of histograms, the dimension for each histogram (1D or 2D), the class name for the histogrammer, the name, title, number of bins, lower and upper limits for the histograms. Comment lines start with `#`. Input file name can be changed in `Main.cpp`.
+
+## How to write new histogrammer
+
+1. Define a new class which inherits from `Histogrammer` class.
+2. Override function `process_event` to process each event and fill the histograms.
+3. Include the new file in the beginning of the `Main.cpp`.
+4. Add a line similar to the following:
+```
+		Histogrammer *nh;
+		if (class_name=="NhitsPlot") {
+			nh=new NhitsPlot();
+		} else if (class_name=="NhitsPerModulePlot") {
+			nh=new NhitsPerModulePlot();
+		}
+```
+5. Define the parameters in the input csv files.
+
+Look at `NhitsPlot.h` and `NhitsPerModulePlot.h` for more details.
+
