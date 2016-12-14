@@ -106,9 +106,7 @@ TList* parse_csv(const TString &s) {
 	TList *l=new TList();
 	int start=0,end=s.Length();
 	int index=0;
-	cout<<s<<endl;
 	while((index=TString(s(start,end)).Index(','))!=-1) {
-		cout<<start<<" "<<index<<endl;
 		l->Add(new TObjString(TString(s(start,index))));
 		start+=index+1;
 	}
@@ -123,22 +121,34 @@ TString trim(const TString &s) {
 }
 
 void Main() {
+	Experiment e("run003424*converted.root","topddt","outfile.root",0);
 	ifstream f("input.csv");
 	string line;
 	while (getline(f,line)) {
+		if (line[0]=='#') continue;
 		TList *l=parse_csv(TString(line.c_str()));
-		TIter next(l);
-		TObjString *ss;
-		while((ss=(TObjString*)next())) {
-			cout<<trim(ss->GetString())<<endl;
+		TString nhist,ndim,class_name,name,title,nbinsx,xmin,xmax,nbinsy,ymin,ymax;
+		nhist=trim(((TObjString*)l->At(0))->GetString());
+		ndim=trim(((TObjString*)l->At(1))->GetString());
+		class_name=trim(((TObjString*)l->At(2))->GetString());
+		name=trim(((TObjString*)l->At(3))->GetString());
+		title=trim(((TObjString*)l->At(4))->GetString());
+		nbinsx=trim(((TObjString*)l->At(5))->GetString());
+		xmin=trim(((TObjString*)l->At(6))->GetString());
+		xmax=trim(((TObjString*)l->At(7))->GetString());
+		if (ndim.Atoi()==2) {
+			nbinsy=trim(((TObjString*)l->At(8))->GetString());
+			ymin=trim(((TObjString*)l->At(9))->GetString());
+			ymax=trim(((TObjString*)l->At(10))->GetString());
+		}
+		if (class_name=="NhitsPlot") {
+			NhitsPlot *nh=new NhitsPlot();
+			nh->setup_type(nhist.Atoi(),ndim.Atoi());
+			nh->setup_histo(name,title,nbinsx.Atoi(),xmin.Atof(),xmax.Atof());
+			nh->initialize();
+			e.add_histogrammer(nh);
 		}
 	}
-	Experiment e("run003424*converted.root","topddt","outfile.root",0);
-	NhitsPlot *nh=new NhitsPlot();
-	nh->setup_type(1,1);
-	nh->setup_histo("nhits","nhits",100,0,100);
-	nh->initialize();
-	e.add_histogrammer(nh);
 	e.event_loop();
 	e.plot();
 	e.finalize();

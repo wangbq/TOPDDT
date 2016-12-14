@@ -3,6 +3,7 @@
 #include "TH1.h"
 #include "TH1F.h"
 #include "TH2F.h"
+#include "TCanvas.h"
 
 #ifndef MAIN_H
 #define MAIN_H
@@ -83,11 +84,21 @@ void Histogrammer::initialize() {
 }
 
 void Histogrammer::plot() {
-	TIter next(&hlist);
+	TString prefix="c_";
 	TH1 *h;
-	while ((h = (TH1 *) next())) {
+	if (nhist==1) {
+		TCanvas *c=new TCanvas(name, title, 800,600);
+		h=(TH1*)hlist.At(0);
 		h->Draw();
-	}
+	} else if (nhist==16) {
+		TCanvas *c=new TCanvas(name, title, 1200,1200);
+		c->Divide(4,4);
+		for (int i=0;i<16;i++) {
+			c->cd(i+1);
+			h=(TH1*)hlist.At(i);
+			h->Draw();
+		}
+	} else return;
 }
 
 void Histogrammer::finalize() {
