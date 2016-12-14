@@ -9,6 +9,7 @@
 #include "TString.h"
 #include "Main.h"
 #include "NhitsPlot.h"
+#include "NhitsPerModulePlot.h"
 
 class Experiment {
 	public:
@@ -55,26 +56,25 @@ void Experiment::event_loop() {
 	int n_eventProcessed=eventNtuple->GetEntries();
 	cout<<"total events: "<<n_eventProcessed<<endl;
 	for (int i = 0; i< n_eventProcessed; i++) { 
-		if (i>100) break;
 		if (i%1000==0) { std::cout << i << endl; }
 		eventNtuple->GetEntry(i);
-		TList b_eventVector;     
+		vector<tophit> b_eventVector;     
 		for (int j = 0; j<nhits; j++) { 
 			// cuts for topcaf hit
 			if (t_ADC[j]<100 || t_ADC[j]>2048) continue;
 			if (t_PulseWidth[j]<3 || t_PulseWidth[j]>10) continue;
 			if (t_Flag[j]<=0) continue;
 			if (t_CorrTime[j]==0) continue;
-			TopHit *hit=new TopHit();
-			hit->evt_no=evt;
-			hit->slot_no=(int)t_BarID[j];
-			hit->channel_id=(int)t_ChannelID[j];
-			hit->flag=(int)t_Flag[j];
-			hit->ADC=t_ADC[j];
-			hit->TDC=t_TDC[j];
-			hit->PulseWidth=t_PulseWidth[j];
-			hit->CorrTime=t_CorrTime[j];
-			b_eventVector.Add(hit);
+			tophit hit;
+			hit.evt_no=evt;
+			hit.slot_no=(int)t_BarID[j];
+			hit.channel_id=(int)t_ChannelID[j];
+			hit.flag=(int)t_Flag[j];
+			hit.ADC=t_ADC[j];
+			hit.TDC=t_TDC[j];
+			hit.PulseWidth=t_PulseWidth[j];
+			hit.CorrTime=t_CorrTime[j];
+			b_eventVector.push_back(hit);
 		}
 		TIter next(hts);
 		Histogrammer *ht;
@@ -141,13 +141,21 @@ void Main() {
 			ymin=trim(((TObjString*)l->At(9))->GetString());
 			ymax=trim(((TObjString*)l->At(10))->GetString());
 		}
+
+		Histogrammer *nh;
 		if (class_name=="NhitsPlot") {
-			NhitsPlot *nh=new NhitsPlot();
-			nh->setup_type(nhist.Atoi(),ndim.Atoi());
-			nh->setup_histo(name,title,nbinsx.Atoi(),xmin.Atof(),xmax.Atof());
-			nh->initialize();
-			e.add_histogrammer(nh);
+			nh=new NhitsPlot();
+		} else if (class_name=="NhitsPerModulePlot") {
+			nh=new NhitsPerModulePlot();
 		}
+
+		nh->setup_type(nhist.Atoi(),ndim.Atoi());
+		if (ndim.Atoi()==1)
+			nh->setup_histo(name,title,nbinsx.Atoi(),xmin.Atof(),xmax.Atof());
+		else if (ndim.Atoi()==2)
+			nh->setup_histo(name,title,nbinsx.Atoi(),xmin.Atof(),xmax.Atof(),nbinsy.Atoi(),ymin.Atof(),ymax.Atof());
+		nh->initialize();
+		e.add_histogrammer(nh);
 	}
 	e.event_loop();
 	e.plot();

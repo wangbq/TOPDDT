@@ -4,6 +4,7 @@
 #include "TH1F.h"
 #include "TH2F.h"
 #include "TCanvas.h"
+#include <vector>
 
 #ifndef MAIN_H
 #define MAIN_H
@@ -12,17 +13,16 @@
 
 using namespace std;
 
-class TopHit: public TObject {
-	public:
-		int evt_no;
-		int slot_no;
-		int channel_id;
-		int flag;
-		float ADC;
-		float TDC;
-		float PulseWidth;
-		float CorrTime;
-};
+typedef struct {
+	int evt_no;
+	int slot_no;
+	int channel_id;
+	int flag;
+	float ADC;
+	float TDC;
+	float PulseWidth;
+	float CorrTime;
+} tophit;
 
 
 class Histogrammer: public TObject {
@@ -33,7 +33,7 @@ class Histogrammer: public TObject {
 		virtual void setup_histo(TString name, TString title, int nbinsx, float xmin, float xmax);
 		virtual void setup_histo(TString name, TString title, int nbinsx, float xmin, float xmax, int nbinsy, float ymin, float ymax);
 		virtual void initialize();
-		virtual void process_event(const TList &hits)=0;
+		virtual void process_event(const vector<tophit> &hits)=0;
 		virtual void plot();
 		virtual void finalize();
 	protected:
