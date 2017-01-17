@@ -7,6 +7,7 @@
 #include "TProfile.h"
 #include "TCanvas.h"
 #include <vector>
+#include <iostream>
 
 #ifndef MAIN_H
 #define MAIN_H

@@ -32,8 +32,13 @@ void NhitsPerModulePlot::process_event(const vector<tophit> &hits, int &hID) {
 //	cout << "NhitsperModulePlot: nevents = "<< nevents[i] << endl;
 			sum[i] += slot_hits[i];
 			sumsq[i] += slot_hits[i] * slot_hits[i] ;
-			mean[i] = ((double) sum[i]) / nevents[i];
-			meansq[i] = ((double) sumsq[i]) / nevents[i];
+			if (nevents[i]!=0) {
+				mean[i] = ((double) sum[i]) / nevents[i];
+				meansq[i] = ((double) sumsq[i]) / nevents[i];
+			} else {
+				mean[i] = 0;
+				meansq[i] = 0;
+			}
 			sd[i] = sqrt( meansq[i] - mean[i] * mean[i] );
 			// ******************************************************** End ACR Code Block
 		}
