@@ -19,7 +19,7 @@ void NhitsPerModule_2D::process_event(const vector<tophit> &hits, int &hID) {
 		ybin = (hits[i].channel_id -1)/64;
 //		cout << "NhitsPerModule_2D: event = " << evtno << " hit no = " << i << endl;
 //		cout << "NhitsPerModule_2D: slot/x/y = " << slotno << ", " << xbin << ", " << ybin << endl;
-		h->Fill(xbin,ybin,slotno);
+		h->Fill(xbin,ybin,slotno-.01);
 	}
 //	for (int i=0;i<16;i++) {
 //		h=(TH2F*)hlist.At(hID);
