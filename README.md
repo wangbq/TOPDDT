@@ -59,3 +59,45 @@ Finally you can define the parameters in the input csv file.
 
 Look at `NhitsPlot.h` and `NhitsPerModulePlot.h` for more implementation details.
 
+## How to use git to update the repository
+
+First, clone the repository to you local computer
+```
+git clone git@github.com:wangbq/TOPDDT.git
+``
+if you haven't done so or
+```
+git pull
+```
+to get the most recent version of the source code.
+
+Before you make any changes, create a new branch and switch to it, so the main branch (master in this repository) won't be affected before you finish your change
+```
+git branch your-new-branch
+git checkout your-new-branch
+```
+
+Make whatever changes you want, and check them into the branch by
+```
+git add .
+git commit -m "your commit message"
+```
+Make sure to use meaningful commit messages to describe your changes.
+
+If everything goes well and your new code runs successfully, merge it with the main branch (master):
+```
+git checkout master
+git merge you-new-branch
+```
+Then send your changes to the repository on github:
+```
+git push
+```
+
+After that, you can delete your new branch if you want:
+```
+git branch -d you-new-branch
+```
+
+Note: you may need to set up your ssh key pairs on github to upload source code to github. Please refer to the help pages on github.com.
+
