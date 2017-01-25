@@ -61,33 +61,35 @@ Look at `NhitsPlot.h` and `NhitsPerModulePlot.h` for more implementation details
 
 ## How to use git to update the repository
 
-First, clone the repository to you local computer
+First, clone the repository to your local computer
 ```
 git clone git@github.com:wangbq/TOPDDT.git
 ```
-if you haven't done so or
+if you haven't done so.
+
+After that, you can use
 ```
 git pull
 ```
-to get the most recent version of the source code.
+to get the most recent version of the source code at any time.
 
-Before you make any changes, create a new branch and switch to it, so the main branch (master in this repository) won't be affected before you finish your change
+Before you make any changes, create a new branch and switch to it, so the main branch (*master* in this repository) won't be affected before you finish your change
 ```
 git branch your-new-branch
 git checkout your-new-branch
 ```
 
-Make whatever changes you want, and check them into the branch by
+Make whatever changes you want, then check them into the branch by using
 ```
 git add .
 git commit -m "your commit message"
 ```
 Make sure to use meaningful commit messages to describe your changes.
 
-If everything goes well and your new code runs successfully, merge it with the main branch (master):
+If everything goes well and your new code runs successfully, merge it with the main branch (*master*):
 ```
 git checkout master
-git merge you-new-branch
+git merge your-new-branch
 ```
 Then send your changes to the repository on github:
 ```
@@ -96,8 +98,8 @@ git push
 
 After that, you can delete your new branch if you want:
 ```
-git branch -d you-new-branch
+git branch -d your-new-branch
 ```
 
-Note: you may need to set up your ssh key pairs on github to upload source code to github. Please refer to the help pages on github.com.
+Note: you may need to set up your ssh key pairs on github to upload source code. Please refer to [the help pages on github.com](https://help.github.com/articles/adding-a-new-ssh-key-to-your-github-account/).
 
