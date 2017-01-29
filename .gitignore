@@ -1,0 +1,9 @@
+*.un*
+*.root
+*.pdf
+*.cxx
+*.d
+*.so
+topddt
+*.swp
+.DS_Store
