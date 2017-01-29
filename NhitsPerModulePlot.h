@@ -22,7 +22,7 @@ void NhitsPerModulePlot::process_event(const vector<tophit> &hits, int &hID) {
 	}
 	for (int i=0;i<16;i++) {
 		if (slot_hits[i]>0) {
-			h->Fill(slot_hits[i],i+.01);
+			h->Fill(slot_hits[i],i);
 //	cout << "NhitsPerModulePlot: fill hist " << hID <<  endl;
 			// ****************************************************** Begin ACR Code Block 
 			if (activeevent[i] == 0) { // change active event to 1 and increment nevents

@@ -8,12 +8,11 @@
 #include "TFile.h"
 #include "TString.h"
 #include "Main.h"
-#include "NhitsPlot.h"
-#include "NhitsProfile.h"
 #include "NhitsPerModulePlot.h"
-#include "NhitsPerModule_2D.h"
-#include "ADC_2D.h"
-#include "TDC_2D.h"
+#include "NhitsPerChannel.h"
+#include "ADC_channel.h"
+#include "ADCW_channel.h"
+#include "TDC_channel.h"
 #include "HitQuality.h"
 
 
@@ -169,7 +168,11 @@ TString trim(const TString &s) {
 
 // Main - open data file(s), histogram steering file, initialize histograms
 void Main() {
-	Experiment e("./run003424/*.root","topddt","outfile.root",0);
+//	string datafiles = "run003424";
+//	string datafiles = "run003524";
+	string datafiles = "run003524_cosmic";
+	Experiment e("./"+datafiles+"/*.root","topddt",datafiles+"_out.root",0);
+//	Experiment e("./run003524/*ModScript_converted.root","topddt","outfile.root",0);
 	ifstream f("input.csv");
 	string line;
 	int histID = 0;
@@ -193,18 +196,18 @@ void Main() {
 		}
 
 		Histogrammer *nh;
-		if (class_name=="NhitsProfile") {
-			nh=new NhitsProfile();
-		} else if (class_name=="NhitsPerModulePlot") {
+		if (class_name=="NhitsPerModulePlot") {
 			nh=new NhitsPerModulePlot();
 		} else if (class_name=="HitQuality") {
 			nh=new HitQuality();
-		} else if (class_name=="NhitsPerModule_2D") {
-			nh=new NhitsPerModule_2D();
-		} else if (class_name=="ADC_2D") {
-			nh=new ADC_2D();
-		} else if (class_name=="TDC_2D") {
-			nh=new TDC_2D();
+		} else if (class_name=="NhitsPerChannel") {
+			nh=new NhitsPerChannel();
+		} else if (class_name=="ADC_channel") {
+			nh=new ADC_channel();
+		} else if (class_name=="ADCW_channel") {
+			nh=new ADCW_channel();
+		} else if (class_name=="TDC_channel") {
+			nh=new TDC_channel();
 		}
 
 		cout << "Main: setup " <<  endl;

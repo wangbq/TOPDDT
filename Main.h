@@ -104,7 +104,7 @@ void Histogrammer::initialize(int &hID) {
 			int hNum= atol(h0->GetName());			
 			cout << "hNum = " << hNum << endl;
 		} else if (name=="ADC_channel") {
-			TH3F *h3=new TH3F(name+"mean_H"+t,title+"mean_H"+t,nbinsx,xmin,xmax,nbinsy,ymin,ymax,nbinsz,zmin,zmax);
+			TH3F *h3=new TH3F(name+"_H"+t,title+"_H"+t,nbinsx,xmin,xmax,nbinsy,ymin,ymax,nbinsz,zmin,zmax);
 			cout << "2-d histID = " << hID << "nbinsZ "<< nbinsz << endl;
 			hlist.Add(h3);			
 		} else if (ndim*nhist==1) {
