@@ -4,5 +4,5 @@
 16,1,NhitsPerModulePlot, 1, bad_hits_module, bad hits per evt-module, 100, 0, 2000
 16,1,NhitsPerChannel, 0, hits_module_ch, nhits-channel, 512, 0, 512
 16,2,ADC_channel, 0, ADC_channel, ADC_channel, 512, 0, 512, 100, 0, 1000
-16,2,ADCW_channel, 0, ADCW_channel, ADCW_channel, 512, 0, 512, 20, 0, 20
-16,2,TDC_channel, 0, TDC_channel, TDC_channel, 512, 0, 512, 100, 0, 500
+16,2,ADCW_channel, 0, ADCW_channel, ADCW_channel, 512, 0, 512, 20, 0, 10
+16,2,TDC_channel, 0, TDC_channel, TDC_channel, 512, 0, 512, 100, -500, 500

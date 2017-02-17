@@ -105,7 +105,7 @@ void Histogrammer::initialize(int &hID) {
 			cout << "hNum = " << hNum << endl;
 		} else if (name=="ADC_channel") {
 			TH3F *h3=new TH3F(name+"_H"+t,title+"_H"+t,nbinsx,xmin,xmax,nbinsy,ymin,ymax,nbinsz,zmin,zmax);
-			cout << "2-d histID = " << hID << "nbinsZ "<< nbinsz << endl;
+			cout << "2-d histID = " << hID << " nbinsZ "<< nbinsz << endl;
 			hlist.Add(h3);			
 		} else if (ndim*nhist==1) {
 			TH1F *h1=new TH1F(name+"_H"+t,title+"_H"+t,nbinsx,xmin,xmax);
@@ -121,7 +121,7 @@ void Histogrammer::initialize(int &hID) {
 			cout << "initialized 1-d x 16, histID = " << hID << endl;
 		} else if (ndim==2) {
 			TH3F *h3=new TH3F(name+"_H"+t,title+"_H"+t,nbinsx,xmin,xmax,nbinsy,ymin,ymax,nbinsz,zmin,zmax);
-			cout << "2-d histID = " << hID << "nbinsZ "<< nbinsz << endl;
+			cout << "2-d histID = " << hID << " nbinsZ "<< nbinsz << endl;
 			hlist.Add(h3);
 		} else
 			return;

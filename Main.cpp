@@ -21,8 +21,8 @@ class Experiment {
 		Experiment(TString input, TString treename, TString output, int type);
 		~Experiment() {};
 		void add_histogrammer(Histogrammer *ht) { hts->Add(ht); }
-		void event_loop();
-		void good_hitB(const float adc, const float pulsewidth, const float flag, const float corrtime, int &htFLAG);
+		void event_loop(string dattyp);
+		void good_hitB(const float adc, const float tdc, const float pulsewidth, const float flag, const float corrtime, int &htFLAG, string dattyp);
 		void finalize();
 		void plot();
 	private:
@@ -42,7 +42,7 @@ Experiment::Experiment(TString input, TString treename, TString output, int type
 	hts=new TList();
 }
 
-void Experiment::event_loop() {
+void Experiment::event_loop(string dattyp) {
 	TChain *eventNtuple = new TChain(treename);
 	eventNtuple->Add(input);
 
@@ -69,10 +69,13 @@ void Experiment::event_loop() {
 		if (i%1000==0) { std::cout << i << endl; }
 		eventNtuple->GetEntry(i);
 		vector<tophit> b_eventVector;     
+		vector<tophit> b_eventVector_cosmic;     
+		vector<tophit> b_eventVector_laser;     
+		vector<tophit> b_eventVector_calpulse;     
 		vector<tophit> b_badhitsVector;     
 		for (int j = 0; j<nhits; j++) { 
 			// cuts for topcaf hit
-			good_hitB(t_ADC[j], t_PulseWidth[j], t_Flag[j], t_CorrTime[j], hitflag) ;
+			good_hitB(t_ADC[j], t_TDC[j], t_PulseWidth[j], t_Flag[j], t_CorrTime[j], hitflag, dattyp) ;
 // scale bad hits as necessary
 			if(hitflag != 0) {
 				badhitcount++;
@@ -119,12 +122,26 @@ void Experiment::event_loop() {
 
 
 // cuts for topcaf hit
-void Experiment::good_hitB(const float adc, const float pulsewidth, const float flag, const float corrtime, int &htFLAG) {
+void Experiment::good_hitB(const float adc, const float tdc, const float pulsewidth, const float flag, const float corrtime, int &htFLAG, string dattyp) {
 	htFLAG = 0;
 	if (adc<100 || adc>2048) htFLAG=htFLAG+1 ;
 	if (pulsewidth<3 || pulsewidth>10)  htFLAG=htFLAG+2;
 	if (flag<=0)  htFLAG=htFLAG+4;
-	if (corrtime==0)  htFLAG=htFLAG+8;
+	if(dattyp=="cosmic") {
+//		cout << dattyp << endl;
+		if(tdc>-200) htFLAG=htFLAG+8;
+		}
+	else if(dattyp=="cal"){
+//		cout << dattyp << endl;
+		if(abs(tdc)>50)  htFLAG=htFLAG+8;
+	}
+	else if(dattyp=="laser"){
+//		cout << dattyp << endl;
+		if(tdc<-200 || abs(tdc)<50)  htFLAG=htFLAG+8;
+	}
+	else if(dattyp=="all"){
+	}
+//	if (corrtime==0)  htFLAG=htFLAG+8;
 //	if(htFLAG != 0) cout << " " << htFLAG << endl;
 	return;
 }
@@ -168,11 +185,12 @@ TString trim(const TString &s) {
 
 // Main - open data file(s), histogram steering file, initialize histograms
 void Main() {
-//	string datafiles = "run003424";
-//	string datafiles = "run003524";
-	string datafiles = "run003524_cosmic";
+	string dattyp;
+//	string datafiles = "run003424"; dattyp="all";
+//	string datafiles = "run003830_laser"; dattyp="laser";
+	string datafiles = "run003524_new"; dattyp="laser";
+//	string datafiles = "run003524_cosmic"; dattyp="cosmic";
 	Experiment e("./"+datafiles+"/*.root","topddt",datafiles+"_out.root",0);
-//	Experiment e("./run003524/*ModScript_converted.root","topddt","outfile.root",0);
 	ifstream f("input.csv");
 	string line;
 	int histID = 0;
@@ -223,7 +241,7 @@ nh->setup_histo(name,title,nbinsx.Atoi(),xmin.Atof(),xmax.Atof(),nbinsy.Atoi(),y
 //		cout << "histID added " << histID << endl;
 	}
 //	cout << "Main: entering event loop " <<  endl;
-	e.event_loop();
+	e.event_loop(dattyp);
 //	e.plot();
 	e.finalize();
 }
