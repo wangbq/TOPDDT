@@ -38,7 +38,7 @@ class Histogrammer: public TObject {
 		virtual void setup_histo(TString name, TString title, int nbinsx, float xmin, float xmax, int nbinsy, float ymin, float ymax);
 		virtual void setup_histo(TString name, TString title, int nbinsx, float xmin, float xmax, int nbinsy, float ymin, float ymax, int nbinsz, float zmin, float zmax);
 		virtual void initialize(int &hID);
-		virtual void process_event(const vector<tophit> &hits, int &hID)=0;
+		virtual void process_event(const vector<tophit> &hits)=0;
 		virtual void plot();
 		virtual void getHitType(int &HTtype);
 		virtual void finalize();

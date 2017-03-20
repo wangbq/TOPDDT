@@ -111,9 +111,9 @@ void Experiment::event_loop(string dattyp) {
 		while ((ht = (Histogrammer *) next())) {
 			ht-> getHitType(HTtype);
 			if(HTtype==0){
-					ht->process_event(b_eventVector, histID);
+					ht->process_event(b_eventVector);
 				} else {
-					ht->process_event(b_badhitsVector, histID);
+					ht->process_event(b_badhitsVector);
 					}
 		}
 //	cout << "Event_loop: end event " << i << " " << b_eventVector[0].evt_no <<  endl;
